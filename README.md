@@ -1,16 +1,22 @@
 
-### *Praktikum Pemrograman Mobile — CRUD Produk Flutter + CodeIgniter 4*
+# 🎯 **README.md — TUGAS 8 (Pertemuan 10)**
+
+### 🚀 *Praktikum Pemrograman Mobile — CRUD Produk Flutter + CodeIgniter 4*
 
 ---
 
-# 📘 **TUGAS 8 — Praktikum Pemrograman Mobile**
+<div align="center">
 
-## **Aplikasi CRUD Produk dengan Flutter**
+# 🛒 **Aplikasi CRUD Produk Flutter**
 
-Aplikasi ini merupakan tugas pertemuan ke-10 yang mengimplementasikan **CRUD Produk** menggunakan Flutter sebagai frontend dan CodeIgniter 4 (REST API) sebagai backend.
-UI pada aplikasi ini dibuat sesuai modul, dan semua **Action Bar** telah disesuaikan dengan nama panggilan:
+### *Dengan Action Bar menggunakan nama panggilan — Defit*
 
-👉 **Defit** (contoh: *List Produk Defit*, *Tambah Produk Defit*, *Detail Produk Defit*)
+![Flutter](https://img.shields.io/badge/Flutter-3.16-blue?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.2-blue?logo=dart)
+![Mobile](https://img.shields.io/badge/Mobile%20App-Praktikum-green)
+![Status](https://img.shields.io/badge/Tugas-Selesai-success)
+
+</div>
 
 ---
 
@@ -27,29 +33,29 @@ UI pada aplikasi ini dibuat sesuai modul, dan semua **Action Bar** telah disesua
 
 # 📱 **Deskripsi Aplikasi**
 
-Aplikasi ini dapat melakukan:
+Aplikasi ini merupakan implementasi UI CRUD Produk sesuai Modul Pertemuan 10.
+Semua **Action Bar sudah memakai nama panggilan "Defit"**, seperti:
 
-✔ Registrasi
-✔ Login
-✔ Menampilkan daftar produk
-✔ Menambah produk
-✔ Mengedit produk
-✔ Menghapus produk
-✔ Melihat detail produk
+* **Login Defit**
+* **Registrasi Defit**
+* **List Produk Defit**
+* **Tambah Produk Defit**
+* **Ubah Produk Defit**
+* **Detail Produk Defit**
 
-Semua proses **CRUD** dilakukan melalui UI Flutter, yang nantinya dihubungkan ke REST API CodeIgniter 4.
+Aplikasi ini dibuat dengan Flutter dan nantinya akan dihubungkan ke REST API CodeIgniter 4.
 
 ---
 
-# 🧩 **Struktur Folder (Flutter)**
+# 🧩 **Struktur Folder**
 
 ```
 lib/
  ├── main.dart
  ├── model/
- │    └── produk.dart
-      └── login.dart
-      └── registrasi.dart
+ │    ├── produk.dart
+ │    ├── login.dart
+ │    └── registrasi.dart
  └── ui/
       ├── login_page.dart
       ├── registrasi_page.dart
@@ -60,67 +66,43 @@ lib/
 
 ---
 
-# 🖼️ **Screenshots**
+# 🖼️ **Tampilan Aplikasi**
 
-| Halaman       | Screenshot                                 |
-| ------------- | ------------------------------------------ |
-| Login         | ![Login](screenshots/login.jpeg)           |
-| Registrasi    | ![Registrasi](screenshots/registrasi.jpeg) |
-| List Produk   | ![List Produk](screenshots/list.jpeg)      |
-| Tambah Produk | ![Tambah Produk](screenshots/tambah.jpeg)  |
-| Detail Produk | ![Detail Produk](screenshots/detail.jpeg)  |
+| Halaman          | Screenshot                                 |
+| ---------------- | ------------------------------------------ |
+| 🔐 Login         | ![Login](screenshots/login.jpeg)           |
+| 📝 Registrasi    | ![Registrasi](screenshots/registrasi.jpeg) |
+| 📋 List Produk   | ![List](screenshots/list.jpeg)             |
+| ➕ Tambah Produk  | ![Tambah](screenshots/tambah.jpeg)         |
+| 🔍 Detail Produk | ![Detail](screenshots/detail.jpeg)         |
 
-> Semua file screenshot disimpan dalam folder:
-> 📂 **/screenshots/**
-
----
-
-# 🧠 **Penjelasan Kode & Logika**
-
-Berikut penjelasan setiap halaman:
+Folder screenshot:
+📂 **/screenshots/**
 
 ---
 
-## 1️⃣ **Model Produk – `produk.dart`**
-
-Model ini digunakan sebagai struktur data untuk objek produk:
-
-```dart
-class Produk {
-  String? id;
-  String? kodeProduk;
-  String? namaProduk;
-  var hargaProduk;
-
-  Produk({this.id, this.kodeProduk, this.namaProduk, this.hargaProduk});
-
-  factory Produk.fromJson(Map<String, dynamic> obj) {
-    return Produk(
-      id: obj['id'],
-      kodeProduk: obj['kode_produk'],
-      namaProduk: obj['nama_produk'],
-      hargaProduk: obj['harga'],
-    );
-  }
-}
-```
-
-Digunakan pada list, detail, edit, dan tambah produk.
+# 🧠 **Penjelasan Detail Setiap Halaman**
 
 ---
 
-## 2️⃣ **Halaman Login — `login_page.dart`**
+## 🔐 **1. Halaman Login — `login_page.dart`**
 
-Fungsi:
+### 🎯 Tujuan:
 
 * Input email & password
 * Validasi form
-* Tombol "Login"
-* Arahkan ke halaman registrasi
+* Navigasi ke halaman Registrasi
 
-Action Bar: **Login Defit**
+### 🌟 Komponen UI:
 
-Potongan kode:
+| Komponen        | Fungsi                      |
+| --------------- | --------------------------- |
+| Email Field     | Input email                 |
+| Password Field  | Input password              |
+| Tombol Login    | Validasi form               |
+| Link Registrasi | Pergi ke halaman registrasi |
+
+### 🧾 Contoh AppBar:
 
 ```dart
 AppBar(
@@ -131,103 +113,130 @@ AppBar(
 
 ---
 
-## 3️⃣ **Halaman Registrasi — `registrasi_page.dart`**
+## 📝 **2. Halaman Registrasi — `registrasi_page.dart`**
 
-Fungsi:
+### 🎯 Tujuan:
 
-* Input nama, email, password, dan konfirmasi password
-* Validasi input
-* Tombol registrasi
+* Registrasi pengguna baru
+* Validasi email, password, konfirmasi password
 
-Action Bar: **Registrasi Defit**
+### 🌟 Komponen:
+
+* Nama
+* Email
+* Password
+* Konfirmasi Password
+* Tombol Registrasi
+
+### AppBar:
 
 ```dart
-AppBar(
-  backgroundColor: Colors.blue,
-  title: const Text("Registrasi Defit"),
-)
+title: const Text("Registrasi Defit")
 ```
 
 ---
 
-## 4️⃣ **List Produk — `produk_page.dart`**
+## 📋 **3. List Produk — `produk_page.dart`**
 
-Fungsi:
+### 🎯 Tujuan:
 
-* Menampilkan daftar produk
-* Tombol tambah produk (+)
-* Menu drawer (Logout)
-* Klik item membuka detail produk
+Menampilkan daftar produk dalam bentuk card.
 
-Action Bar: **List Produk Defit**
+### 🌟 Fitur:
 
-```dart
-AppBar(
-  title: const Text("List Produk Defit"),
-  backgroundColor: Colors.blue,
-)
-```
+* List produk statis
+* Drawer menu (Logout)
+* Tombol tambah (+) → menuju form tambah produk
+* Klik item → buka detail produk
 
-Tampilan dibuat dengan ListView + Card.
-
----
-
-## 5️⃣ **Tambah / Edit Produk — `produk_form.dart`**
-
-Fungsi:
-
-* Menambah produk baru
-* Mengubah produk (jika ada argumen produk)
-* Menggunakan satu halaman untuk dua mode
-
-Jika update → Form otomatis terisi.
-
-Action Bar:
-
-* Tambah Produk Defit
-* Ubah Produk Defit
-
-Kode otomatis menentukan judul halaman:
+### AppBar:
 
 ```dart
-judul = "UBAH PRODUK Defit";
-tombolSubmit = "UBAH";
+title: const Text("List Produk Defit")
 ```
 
 ---
 
-## 6️⃣ **Detail Produk — `produk_detail.dart`**
+## ➕ **4. Tambah / Edit Produk — `produk_form.dart`**
 
-Fungsi:
+### 🎯 Tujuan:
 
-* Menampilkan data produk (kode, nama, harga)
-* Tombol Edit
-* Tombol Delete
+Halaman serbaguna untuk:
 
-Action Bar: **Detail Produk Defit**
+✔ Tambah produk
+✔ Edit produk
+
+### 🌟 Mode Otomatis:
+
+Jika `widget.produk != null` → mode edit.
+Jika null → mode tambah.
+
+### 🧾 Contoh penentuan mode:
+
+```dart
+if (widget.produk != null) {
+  judul = "UBAH PRODUK Defit";
+} else {
+  judul = "TAMBAH PRODUK Defit";
+}
+```
+
+### Komponen:
+
+* TextField Kode Produk
+* TextField Nama Produk
+* TextField Harga
+* Tombol Ubah / Simpan
+
+---
+
+## 🔍 **5. Detail Produk — `produk_detail.dart`**
+
+### 🎯 Tujuan:
+
+Menampilkan detail lengkap:
+
+* Kode Produk
+* Nama Produk
+* Harga Produk
+
+Termasuk tombol:
+
+* **Edit Produk** → membuka `produk_form.dart`
+* **Hapus Produk** → (siap dihubungkan API)
+
+### AppBar:
+
+```dart
+title: const Text("Detail Produk Defit")
+```
 
 ---
 
 # 🚀 **Cara Menjalankan Aplikasi**
 
-1️⃣ Jalankan perintah:
+### 1. Install dependency:
 
 ```
 flutter pub get
 ```
 
-2️⃣ Jalankan aplikasi:
+### 2. Jalankan aplikasi:
 
 ```
 flutter run
 ```
 
-3️⃣ Aplikasi akan dimulai pada halaman **Login Defit**.
+### 3. Halaman pertama yang tampil:
+
+👉 **Login Defit**
 
 ---
 
-# 📌 **Catatan**
+# 📌 *Catatan Penting*
 
-* Backend/API belum terhubung (data masih statis).
+* Data produk masih **statis**, belum terhubung API.
+* UI mengikuti modul pertemuan 10.
+* Action Bar sudah memakai nama panggilan **Defit** sesuai instruksi dosen.
 
 ---
