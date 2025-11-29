@@ -1,18 +1,17 @@
 
-````markdown
-# 📘 **TUGAS 9 (Pertemuan 11) — CRUD & BLoC Pattern**
+# 📘 **TUGAS 9 (Pertemuan 11) — Full Stack Mobile Development**
 
-### 🚀 **Pengembangan Aplikasi Mobile TokoKita**
-**Integrasi Flutter dengan REST API CodeIgniter 4**
+### 🚀 **Aplikasi TokoKita: Implementasi CRUD Lengkap**
+**Integrasi Flutter BLoC dengan REST API CodeIgniter 4**
 
 ---
 
 <div align="center">
 
-![Flutter](https://img.shields.io/badge/Flutter-3.16-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Flutter](https://img.shields.io/badge/Flutter-3.19-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 ![Dart](https://img.shields.io/badge/Dart-3.0-0175C2?style=for-the-badge&logo=dart&logoColor=white)
-![CodeIgniter](https://img.shields.io/badge/CodeIgniter-4.0-EF4223?style=for-the-badge&logo=codeigniter&logoColor=white)
-![BLoC](https://img.shields.io/badge/Architecture-BLoC-orange?style=for-the-badge)
+![CodeIgniter](https://img.shields.io/badge/Backend-CodeIgniter4-EF4223?style=for-the-badge&logo=codeigniter&logoColor=white)
+![REST API](https://img.shields.io/badge/API-RESTful-green?style=for-the-badge)
 
 </div>
 
@@ -25,115 +24,235 @@
 | **Nama** | Defit Bagus Saputra |
 | **NIM** | H1D023036 |
 | **Kelas** | Pemrograman Mobile (Shift C/F) |
-| **Topik** | Implementasi Full Stack CRUD Mobile |
+| **Topik** | CRUD Full Stack (Create, Read, Update, Delete) |
 
 ---
 
-# 📂 **Struktur Folder & Arsitektur**
+# 📸 **Dokumentasi & Alur Proses CRUD**
 
-Aplikasi ini menerapkan **Pemisahan Concern (SoC)** yang jelas antara UI dan Logic menggunakan pattern BLoC.
-
-```plaintext
-lib/
-├── 🧠 bloc/                # BUSINESS LOGIC (Pengelola State & API)
-├── 🛠️ helpers/             # UTILITIES (Fungsi Bantuan & Token)
-├── 📦 model/               # DATA MODELS (Representasi JSON)
-├── 📱 ui/                  # USER INTERFACE (Tampilan)
-└── 🧩 widget/              # REUSABLE WIDGETS (Dialog)
-````
-
------
-
-# 📸 **Dokumentasi & Alur Aplikasi**
-
-Berikut adalah dokumentasi langkah demi langkah penggunaan aplikasi TokoKita mulai dari Registrasi, Login, hingga proses CRUD Produk.
+Berikut adalah dokumentasi lengkap penggunaan aplikasi TokoKita beserta penjelasan teknis di balik layar.
 
 ## 1️⃣ **Proses Registrasi**
 
-Langkah pertama bagi pengguna baru adalah mendaftarkan akun agar datanya tercatat di database server.
+Pendaftaran pengguna baru untuk mendapatkan akses ke sistem.
 
-### **a. Mengisi Form Registrasi**
+### **a. Input Data Registrasi**
+Pengguna mengisi **Nama**, **Email**, dan **Password**.
 
-Pengguna menginputkan **Nama**, **Email**, **Password**, dan **Konfirmasi Password**.
+<div align="center">
+  <img src="screenshots/register.jpeg" width="300" />
+</div>
 
-  * *Validasi:* Email harus format valid, Password minimal 6 karakter.
+> **Penjelasan:** Form divalidasi agar email sesuai format dan password minimal 6 karakter. Saat tombol ditekan, data dikirim ke `RegistrasiBloc`.
 
 ### **b. Registrasi Berhasil**
+Jika sukses, server merespon dengan status 200 dan muncul popup sukses.
 
-Sistem mengirim data via API. Jika sukses, muncul popup konfirmasi dan user diarahkan untuk Login.
+<div align="center">
+  <img src="screenshots/register_berhasil.jpeg" width="300" />
+</div>
+
+**Kode Implementasi (`registrasi_page.dart`):**
+```dart
+RegistrasiBloc.registrasi(
+  nama: _namaTextboxController.text,
+  email: _emailTextboxController.text,
+  password: _passwordTextboxController.text,
+).then((value) {
+  // Jika sukses tampilkan dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) => SuccessDialog(
+      description: "Registrasi berhasil, silahkan login",
+      okClick: () => Navigator.pop(context),
+    ),
+  );
+}, onError: (error) {
+  // Error handling
+});
+````
 
 -----
 
 ## 2️⃣ **Proses Login**
 
-Setelah memiliki akun, pengguna masuk ke sistem untuk mendapatkan **Token Akses**.
+Autentikasi pengguna untuk mendapatkan Token JWT.
 
 ### **a. Mengisi Kredensial**
 
-Pengguna memasukkan Email dan Password yang telah didaftarkan sebelumnya.
+Pengguna memasukkan Email dan Password yang telah terdaftar.
 
-### **b. Login Berhasil**
+\<div align="center"\>
+\<img src="screenshots/login.jpeg" width="300" /\>
+\</div\>
 
-Jika data benar, server memberikan respon kode `200` beserta Token. Aplikasi menyimpan token ini dan mengarahkan pengguna ke halaman utama (List Produk).
+> **Penjelasan:** Aplikasi mengirim request POST ke endpoint `/login`.
+
+### **b. Login Berhasil (Masuk ke Dashboard)**
+
+Jika kredensial valid, Token disimpan di `SharedPreferences` dan pengguna diarahkan ke halaman List Produk.
+
+\<div align="center"\>
+\<img src="screenshots/login\_berhasil.jpeg" width="300" /\>
+\</div\>
+
+**Kode Implementasi (`login_page.dart`):**
+
+```dart
+LoginBloc.login(
+  email: _emailTextboxController.text,
+  password: _passwordTextboxController.text
+).then((value) async {
+  if (value.code == 200) {
+    // Simpan Token & User ID ke penyimpanan lokal
+    await UserInfo().setToken(value.token.toString());
+    await UserInfo().setUserID(int.parse(value.userID.toString()));
+    
+    // Pindah ke Halaman Produk
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const ProdukPage()));
+  } else {
+    showDialog(...); // Tampilkan WarningDialog
+  }
+});
+```
 
 -----
 
 ## 3️⃣ **Proses Tambah Data (Create)**
 
-Menambahkan inventaris produk baru ke toko.
+Menambahkan produk baru ke database.
 
 ### **a. Form Tambah Produk**
 
-User menekan tombol **(+)** di halaman utama. Form terbuka dalam keadaan kosong (Mode Tambah). User mengisi Kode, Nama, dan Harga Produk.
+Pengguna mengisi **Kode Produk**, **Nama Produk**, dan **Harga**.
+
+\<div align="center"\>
+\<img src="screenshots/tambah.jpeg" width="300" /\>
+\</div\>
+
+> **Penjelasan:** Form ini menggunakan `ProdukForm` dalam mode "Tambah" (karena parameter produk null).
 
 ### **b. Data Berhasil Disimpan**
 
-Data dikirim ke server via method `POST`. Jika sukses, user dikembalikan ke halaman list dan data baru langsung tampil.
+Setelah simpan sukses, pengguna kembali ke list dan data "Kamera Sony" muncul.
+
+\<div align="center"\>
+\<img src="screenshots/tambah\_berhasil.jpeg" width="300" /\>
+\</div\>
+
+**Kode Implementasi (`produk_form.dart`):**
+
+```dart
+Produk createProduk = Produk(id: null);
+createProduk.kodeProduk = _kodeProdukTextboxController.text;
+createProduk.namaProduk = _namaProdukTextboxController.text;
+createProduk.hargaProduk = int.parse(_hargaProdukTextboxController.text);
+
+// Panggil BLoC Add Produk
+ProdukBloc.addProduk(produk: createProduk).then((value) {
+  Navigator.of(context).push(MaterialPageRoute(
+      builder: (BuildContext context) => const ProdukPage()));
+}, onError: (error) {
+  _showWarning("Simpan gagal, silahkan coba lagi");
+});
+```
 
 -----
 
 ## 4️⃣ **Proses Edit Data (Update)**
 
-Memperbarui informasi produk yang salah atau berubah.
+Memperbarui data produk yang sudah ada.
 
-### **a. Membuka Form Edit (Pre-filled)**
+### **a. Membuka Detail & Form Edit**
 
-Dari halaman detail produk, user menekan tombol **EDIT**. Form terbuka dan kolom isian **terisi otomatis** dengan data produk yang dipilih (tidak perlu mengetik ulang dari awal).
+Dari detail produk, tekan tombol **EDIT**. Form terbuka dengan data lama terisi otomatis ("Kamera Sony" -\> diubah jadi "Kamera Sony DLSR").
 
-### **b. Melakukan Perubahan**
+\<div align="center"\>
+\<img src="screenshots/edit.jpeg" width="300" title="Halaman Detail" /\>
+\<img src="screenshots/coba\_edit.jpeg" width="300" title="Form Edit Terisi" /\>
+\</div\>
 
-User mengubah data yang diinginkan (Contoh: Mengubah Harga produk).
+> **Penjelasan:** Data dikirim menggunakan method `PUT`.
 
-### **c. Edit Berhasil**
+### **b. Edit Berhasil**
 
-Aplikasi mengirim data perubahan ke server menggunakan method `PUT` dengan format JSON. Data di list diperbarui sesuai inputan terakhir.
+Data pada list berubah sesuai inputan terbaru.
+
+\<div align="center"\>
+\<img src="screenshots/edit\_berhasil.jpeg" width="300" /\>
+\</div\>
+
+**Kode Implementasi (`produk_form.dart`):**
+
+```dart
+Produk updateProduk = Produk(id: widget.produk!.id!);
+updateProduk.kodeProduk = _kodeProdukTextboxController.text;
+updateProduk.namaProduk = _namaProdukTextboxController.text; // Data Baru
+updateProduk.hargaProduk = int.parse(_hargaProdukTextboxController.text);
+
+// Panggil BLoC Update
+ProdukBloc.updateProduk(produk: updateProduk).then((value) {
+  Navigator.of(context).push(MaterialPageRoute(
+      builder: (BuildContext context) => const ProdukPage()));
+}, onError: (error) {
+  _showWarning("Ubah data gagal");
+});
+```
 
 -----
 
 ## 5️⃣ **Proses Hapus Data (Delete)**
 
-Menghapus produk yang sudah tidak dijual.
+Menghapus data produk permanen.
 
-### **a. Konfirmasi Penghapusan**
+### **a. Konfirmasi Hapus**
 
-User menekan tombol **DELETE** di halaman detail. Muncul dialog konfirmasi *"Yakin ingin menghapus data ini?"* untuk mencegah ketidaksengajaan.
+Saat tombol **DELETE** ditekan, muncul peringatan untuk mencegah ketidaksengajaan.
+
+\<div align="center"\>
+\<img src="screenshots/hapus.jpeg" width="300" /\>
+\</div\>
+
+> **Penjelasan:** Jika "Ya, Hapus" ditekan, ID produk dikirim ke API dengan method `DELETE`.
 
 ### **b. Hapus Berhasil**
 
-Jika user menekan "Ya", aplikasi mengirim request `DELETE` ke server. Produk dihapus dari database dan hilang dari tampilan list.
+Produk "Kamera Sony DLSR" hilang dari list.
+
+\<div align="center"\>
+\<img src="screenshots/hapus\_berhasil.jpeg" width="300" /\>
+\</div\>
+
+**Kode Implementasi (`produk_detail.dart`):**
+
+```dart
+// Di dalam Dialog Konfirmasi
+onPressed: () {
+  ProdukBloc.deleteProduk(id: int.parse(widget.produk!.id!)).then(
+      (value) => {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => const ProdukPage()),
+                (route) => false)
+          }, onError: (error) {
+    showDialog(...); // Tampilkan error jika gagal
+  });
+},
+```
 
 -----
 
-# 🛠️ **Konfigurasi Teknis**
+# 🛠️ **Struktur & Konfigurasi**
 
-Aplikasi ini dikonfigurasi untuk berjalan di jaringan lokal (LAN/WiFi).
+Aplikasi menggunakan arsitektur BLoC sederhana (Business Logic Component) untuk memisahkan UI dari proses API.
 
-  * **API Base URL:** Diatur di `helpers/api_url.dart`.
-  * **Backend Server:** Dijalankan dengan perintah `php spark serve --host [IP_LAPTOP] --port 8080`.
-  * **Keamanan:** Menggunakan `Bearer Token` pada setiap request API (kecuali Login/Register).
+  * **`lib/bloc`**: Menangani request ke API (Login, Registrasi, Produk).
+  * **`lib/ui`**: Menangani tampilan (Page & Form).
+  * **`lib/helpers`**: Menangani Shared Preference (Token) dan Exception.
 
------
+<!-- end list -->
 
-**© 2025 Defit Bagus Saputra**
-
+```plaintext
+Copyright © 2025 Defit Bagus Saputra
 ```
