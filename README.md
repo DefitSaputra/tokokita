@@ -247,19 +247,23 @@ tokokita/
 │   │   ├── login_bloc.dart
 │   │   ├── registrasi_bloc.dart
 │   │   └── produk_bloc.dart
+|   |   └── logout_bloc.dart
 │   ├── ui/
 │   │   ├── pages/
 │   │   │   ├── login_page.dart
 │   │   │   ├── registrasi_page.dart
 │   │   │   └── produk_page.dart
-│   │   └── forms/
-│   │       └── produk_form.dart
+│   │   |   └── produk_form.dart
+|   |   |   └── produk_detail.dart    
 │   ├── helpers/
 │   │   ├── user_info.dart
-│   │   ├── api_helper.dart
+│   │   ├── api.dart
+        ├── api_url.dart
 │   │   └── app_exception.dart
 │   ├── models/
 │   │   └── produk.dart
+        └── login.dart
+        └── register.dart
 │   └── main.dart
 ├── pubspec.yaml
 └── README.md
