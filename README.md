@@ -40,7 +40,7 @@ Pendaftaran pengguna baru untuk mendapatkan akses ke sistem.
 Pengguna mengisi **Nama**, **Email**, dan **Password**.
 
 <div align="center">
-  <img src="screenshots/register.jpeg" width="300" />
+  <img src="./screenshots/register.jpeg" width="300" alt="Form Registrasi" />
 </div>
 
 > **Penjelasan:** Form divalidasi agar email sesuai format dan password minimal 6 karakter. Saat tombol ditekan, data dikirim ke `RegistrasiBloc`.
@@ -49,7 +49,7 @@ Pengguna mengisi **Nama**, **Email**, dan **Password**.
 Jika sukses, server merespon dengan status 200 dan muncul popup sukses.
 
 <div align="center">
-  <img src="screenshots/register_berhasil.jpeg" width="300" />
+  <img src="./screenshots/register_berhasil.jpeg" width="300" alt="Registrasi Berhasil" />
 </div>
 
 **Kode Implementasi (`registrasi_page.dart`):**
@@ -59,7 +59,6 @@ RegistrasiBloc.registrasi(
   email: _emailTextboxController.text,
   password: _passwordTextboxController.text,
 ).then((value) {
-  // Jika sukses tampilkan dialog
   showDialog(
     context: context,
     builder: (BuildContext context) => SuccessDialog(
@@ -70,9 +69,9 @@ RegistrasiBloc.registrasi(
 }, onError: (error) {
   // Error handling
 });
-````
+```
 
------
+---
 
 ## 2️⃣ **Proses Login**
 
@@ -82,9 +81,9 @@ Autentikasi pengguna untuk mendapatkan Token JWT.
 
 Pengguna memasukkan Email dan Password yang telah terdaftar.
 
-\<div align="center"\>
-\<img src="screenshots/login.jpeg" width="300" /\>
-\</div\>
+<div align="center">
+  <img src="./screenshots/login.jpeg" width="300" alt="Form Login" />
+</div>
 
 > **Penjelasan:** Aplikasi mengirim request POST ke endpoint `/login`.
 
@@ -92,9 +91,9 @@ Pengguna memasukkan Email dan Password yang telah terdaftar.
 
 Jika kredensial valid, Token disimpan di `SharedPreferences` dan pengguna diarahkan ke halaman List Produk.
 
-\<div align="center"\>
-\<img src="screenshots/login\_berhasil.jpeg" width="300" /\>
-\</div\>
+<div align="center">
+  <img src="./screenshots/login_berhasil.jpeg" width="300" alt="Login Berhasil" />
+</div>
 
 **Kode Implementasi (`login_page.dart`):**
 
@@ -104,20 +103,18 @@ LoginBloc.login(
   password: _passwordTextboxController.text
 ).then((value) async {
   if (value.code == 200) {
-    // Simpan Token & User ID ke penyimpanan lokal
     await UserInfo().setToken(value.token.toString());
     await UserInfo().setUserID(int.parse(value.userID.toString()));
     
-    // Pindah ke Halaman Produk
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const ProdukPage()));
   } else {
-    showDialog(...); // Tampilkan WarningDialog
+    showDialog(...);
   }
 });
 ```
 
------
+---
 
 ## 3️⃣ **Proses Tambah Data (Create)**
 
@@ -127,9 +124,9 @@ Menambahkan produk baru ke database.
 
 Pengguna mengisi **Kode Produk**, **Nama Produk**, dan **Harga**.
 
-\<div align="center"\>
-\<img src="screenshots/tambah.jpeg" width="300" /\>
-\</div\>
+<div align="center">
+  <img src="./screenshots/tambah.jpeg" width="300" alt="Form Tambah Produk" />
+</div>
 
 > **Penjelasan:** Form ini menggunakan `ProdukForm` dalam mode "Tambah" (karena parameter produk null).
 
@@ -137,9 +134,9 @@ Pengguna mengisi **Kode Produk**, **Nama Produk**, dan **Harga**.
 
 Setelah simpan sukses, pengguna kembali ke list dan data "Kamera Sony" muncul.
 
-\<div align="center"\>
-\<img src="screenshots/tambah\_berhasil.jpeg" width="300" /\>
-\</div\>
+<div align="center">
+  <img src="./screenshots/tambah_berhasil.jpeg" width="300" alt="Tambah Berhasil" />
+</div>
 
 **Kode Implementasi (`produk_form.dart`):**
 
@@ -149,7 +146,6 @@ createProduk.kodeProduk = _kodeProdukTextboxController.text;
 createProduk.namaProduk = _namaProdukTextboxController.text;
 createProduk.hargaProduk = int.parse(_hargaProdukTextboxController.text);
 
-// Panggil BLoC Add Produk
 ProdukBloc.addProduk(produk: createProduk).then((value) {
   Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext context) => const ProdukPage()));
@@ -158,7 +154,7 @@ ProdukBloc.addProduk(produk: createProduk).then((value) {
 });
 ```
 
------
+---
 
 ## 4️⃣ **Proses Edit Data (Update)**
 
@@ -166,12 +162,12 @@ Memperbarui data produk yang sudah ada.
 
 ### **a. Membuka Detail & Form Edit**
 
-Dari detail produk, tekan tombol **EDIT**. Form terbuka dengan data lama terisi otomatis ("Kamera Sony" -\> diubah jadi "Kamera Sony DLSR").
+Dari detail produk, tekan tombol **EDIT**. Form terbuka dengan data lama terisi otomatis.
 
-\<div align="center"\>
-\<img src="screenshots/edit.jpeg" width="300" title="Halaman Detail" /\>
-\<img src="screenshots/coba\_edit.jpeg" width="300" title="Form Edit Terisi" /\>
-\</div\>
+<div align="center">
+  <img src="./screenshots/edit.jpeg" width="300" alt="Detail Produk" />
+  <img src="./screenshots/coba_edit.jpeg" width="300" alt="Form Edit Terisi" />
+</div>
 
 > **Penjelasan:** Data dikirim menggunakan method `PUT`.
 
@@ -179,19 +175,18 @@ Dari detail produk, tekan tombol **EDIT**. Form terbuka dengan data lama terisi 
 
 Data pada list berubah sesuai inputan terbaru.
 
-\<div align="center"\>
-\<img src="screenshots/edit\_berhasil.jpeg" width="300" /\>
-\</div\>
+<div align="center">
+  <img src="./screenshots/edit_berhasil.jpeg" width="300" alt="Edit Berhasil" />
+</div>
 
 **Kode Implementasi (`produk_form.dart`):**
 
 ```dart
 Produk updateProduk = Produk(id: widget.produk!.id!);
 updateProduk.kodeProduk = _kodeProdukTextboxController.text;
-updateProduk.namaProduk = _namaProdukTextboxController.text; // Data Baru
+updateProduk.namaProduk = _namaProdukTextboxController.text;
 updateProduk.hargaProduk = int.parse(_hargaProdukTextboxController.text);
 
-// Panggil BLoC Update
 ProdukBloc.updateProduk(produk: updateProduk).then((value) {
   Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext context) => const ProdukPage()));
@@ -200,7 +195,7 @@ ProdukBloc.updateProduk(produk: updateProduk).then((value) {
 });
 ```
 
------
+---
 
 ## 5️⃣ **Proses Hapus Data (Delete)**
 
@@ -210,24 +205,23 @@ Menghapus data produk permanen.
 
 Saat tombol **DELETE** ditekan, muncul peringatan untuk mencegah ketidaksengajaan.
 
-\<div align="center"\>
-\<img src="screenshots/hapus.jpeg" width="300" /\>
-\</div\>
+<div align="center">
+  <img src="./screenshots/hapus.jpeg" width="300" alt="Konfirmasi Hapus" />
+</div>
 
 > **Penjelasan:** Jika "Ya, Hapus" ditekan, ID produk dikirim ke API dengan method `DELETE`.
 
 ### **b. Hapus Berhasil**
 
-Produk "Kamera Sony DLSR" hilang dari list.
+Produk hilang dari list.
 
-\<div align="center"\>
-\<img src="screenshots/hapus\_berhasil.jpeg" width="300" /\>
-\</div\>
+<div align="center">
+  <img src="./screenshots/hapus_berhasil.jpeg" width="300" alt="Hapus Berhasil" />
+</div>
 
 **Kode Implementasi (`produk_detail.dart`):**
 
 ```dart
-// Di dalam Dialog Konfirmasi
 onPressed: () {
   ProdukBloc.deleteProduk(id: int.parse(widget.produk!.id!)).then(
       (value) => {
@@ -236,23 +230,22 @@ onPressed: () {
                     builder: (context) => const ProdukPage()),
                 (route) => false)
           }, onError: (error) {
-    showDialog(...); // Tampilkan error jika gagal
+    showDialog(...);
   });
 },
 ```
 
------
+---
 
 # 🛠️ **Struktur & Konfigurasi**
 
 Aplikasi menggunakan arsitektur BLoC sederhana (Business Logic Component) untuk memisahkan UI dari proses API.
 
-  * **`lib/bloc`**: Menangani request ke API (Login, Registrasi, Produk).
-  * **`lib/ui`**: Menangani tampilan (Page & Form).
-  * **`lib/helpers`**: Menangani Shared Preference (Token) dan Exception.
-
-<!-- end list -->
+* **`lib/bloc`**: Menangani request ke API (Login, Registrasi, Produk).
+* **`lib/ui`**: Menangani tampilan (Page & Form).
+* **`lib/helpers`**: Menangani Shared Preference (Token) dan Exception.
 
 ```plaintext
 Copyright © 2025 Defit Bagus Saputra
 ```
+
