@@ -1,50 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:tokokita/helpers/user_info.dart';
 import 'package:tokokita/ui/login_page.dart';
-// import 'package:tokokita/ui/produk_page.dart'; // tidak jadi home
+import 'package:tokokita/ui/produk_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Widget page = const CircularProgressIndicator();
+
+  @override
+  void initState() {
+    super.initState();
+    isLogin();
+  }
+
+  void isLogin() async {
+    var token = await UserInfo().getToken();
+    
+    if (token != null) {
+      setState(() {
+        page = const ProdukPage();
+      });
+    } else {
+      setState(() {
+        page = const LoginPage();
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: "Toko Kita",
+    return MaterialApp(
+      title: 'Toko Kita',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),   // ← ARAHKAN KE LOGIN DULU
-    );
-  }
-}
-
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
+      home: page,
     );
   }
 }
