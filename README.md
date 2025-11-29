@@ -1,20 +1,18 @@
 
-# 🎯 **README.md — TUGAS 8 (Pertemuan 10)**
+````markdown
+# 📘 **TUGAS 9 (Pertemuan 11) — CRUD & BLoC Pattern**
 
-### 🚀 *Praktikum Pemrograman Mobile — CRUD Produk Flutter + CodeIgniter 4*
+### 🚀 **Pengembangan Aplikasi Mobile TokoKita**
+**Integrasi Flutter dengan REST API CodeIgniter 4**
 
 ---
 
 <div align="center">
 
-# 🛒 **Aplikasi CRUD Produk Flutter**
-
-### *Dengan Action Bar menggunakan nama panggilan — Defit*
-
-![Flutter](https://img.shields.io/badge/Flutter-3.16-blue?logo=flutter)
-![Dart](https://img.shields.io/badge/Dart-3.2-blue?logo=dart)
-![Mobile](https://img.shields.io/badge/Mobile%20App-Praktikum-green)
-![Status](https://img.shields.io/badge/Tugas-Selesai-success)
+![Flutter](https://img.shields.io/badge/Flutter-3.16-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-3.0-0175C2?style=for-the-badge&logo=dart&logoColor=white)
+![CodeIgniter](https://img.shields.io/badge/CodeIgniter-4.0-EF4223?style=for-the-badge&logo=codeigniter&logoColor=white)
+![BLoC](https://img.shields.io/badge/Architecture-BLoC-orange?style=for-the-badge)
 
 </div>
 
@@ -22,221 +20,120 @@
 
 # 👤 **Identitas Mahasiswa**
 
-| Keterangan        | Data                            |
-| ----------------- | ------------------------------- |
-| **Nama**          | Defit Bagus Saputra             |
-| **NIM**           | H1D023036                       |
-| **Kelas / Shift** | Shift C (Awal) / Shift F (Baru) |
-| **Mata Kuliah**   | Praktikum Pemrograman Mobile    |
+| Atribut | Detail Data |
+| :--- | :--- |
+| **Nama** | Defit Bagus Saputra |
+| **NIM** | H1D023036 |
+| **Kelas** | Pemrograman Mobile (Shift C/F) |
+| **Topik** | Implementasi Full Stack CRUD Mobile |
 
 ---
 
-# 📱 **Deskripsi Aplikasi**
+# 📂 **Struktur Folder & Arsitektur**
 
-Aplikasi ini merupakan implementasi UI CRUD Produk sesuai Modul Pertemuan 10.
-Semua **Action Bar sudah memakai nama panggilan "Defit"**, seperti:
+Aplikasi ini menerapkan **Pemisahan Concern (SoC)** yang jelas antara UI dan Logic menggunakan pattern BLoC.
 
-* **Login Defit**
-* **Registrasi Defit**
-* **List Produk Defit**
-* **Tambah Produk Defit**
-* **Ubah Produk Defit**
-* **Detail Produk Defit**
-
-Aplikasi ini dibuat dengan Flutter dan nantinya akan dihubungkan ke REST API CodeIgniter 4.
-
----
-
-# 🧩 **Struktur Folder**
-
-```
+```plaintext
 lib/
- ├── main.dart
- ├── model/
- │    ├── produk.dart
- │    ├── login.dart
- │    └── registrasi.dart
- └── ui/
-      ├── login_page.dart
-      ├── registrasi_page.dart
-      ├── produk_page.dart
-      ├── produk_form.dart
-      └── produk_detail.dart
-```
+├── 🧠 bloc/                # BUSINESS LOGIC (Pengelola State & API)
+├── 🛠️ helpers/             # UTILITIES (Fungsi Bantuan & Token)
+├── 📦 model/               # DATA MODELS (Representasi JSON)
+├── 📱 ui/                  # USER INTERFACE (Tampilan)
+└── 🧩 widget/              # REUSABLE WIDGETS (Dialog)
+````
 
----
+-----
 
-# 🖼️ **Tampilan Aplikasi**
+# 📸 **Dokumentasi & Alur Aplikasi**
 
-| Halaman          | Screenshot                                 |
-| ---------------- | ------------------------------------------ |
-| 🔐 Login         | ![Login](screenshots/login.jpeg)           |
-| 📝 Registrasi    | ![Registrasi](screenshots/registrasi.jpeg) |
-| 📋 List Produk   | ![List](screenshots/list.jpeg)             |
-| ➕ Tambah Produk  | ![Tambah](screenshots/tambah.jpeg)         |
-| 🔍 Detail Produk | ![Detail](screenshots/detail.jpeg)         |
+Berikut adalah dokumentasi langkah demi langkah penggunaan aplikasi TokoKita mulai dari Registrasi, Login, hingga proses CRUD Produk.
 
-Folder screenshot:
-📂 **/screenshots/**
+## 1️⃣ **Proses Registrasi**
 
----
+Langkah pertama bagi pengguna baru adalah mendaftarkan akun agar datanya tercatat di database server.
 
-# 🧠 **Penjelasan Detail Setiap Halaman**
+### **a. Mengisi Form Registrasi**
 
----
+Pengguna menginputkan **Nama**, **Email**, **Password**, dan **Konfirmasi Password**.
 
-## 🔐 **1. Halaman Login — `login_page.dart`**
+  * *Validasi:* Email harus format valid, Password minimal 6 karakter.
 
-### 🎯 Tujuan:
+### **b. Registrasi Berhasil**
 
-* Input email & password
-* Validasi form
-* Navigasi ke halaman Registrasi
+Sistem mengirim data via API. Jika sukses, muncul popup konfirmasi dan user diarahkan untuk Login.
 
-### 🌟 Komponen UI:
+-----
 
-| Komponen        | Fungsi                      |
-| --------------- | --------------------------- |
-| Email Field     | Input email                 |
-| Password Field  | Input password              |
-| Tombol Login    | Validasi form               |
-| Link Registrasi | Pergi ke halaman registrasi |
+## 2️⃣ **Proses Login**
 
-### 🧾 Contoh AppBar:
+Setelah memiliki akun, pengguna masuk ke sistem untuk mendapatkan **Token Akses**.
 
-```dart
-AppBar(
-  backgroundColor: Colors.blue,
-  title: const Text("Login Defit"),
-)
-```
+### **a. Mengisi Kredensial**
 
----
+Pengguna memasukkan Email dan Password yang telah didaftarkan sebelumnya.
 
-## 📝 **2. Halaman Registrasi — `registrasi_page.dart`**
+### **b. Login Berhasil**
 
-### 🎯 Tujuan:
+Jika data benar, server memberikan respon kode `200` beserta Token. Aplikasi menyimpan token ini dan mengarahkan pengguna ke halaman utama (List Produk).
 
-* Registrasi pengguna baru
-* Validasi email, password, konfirmasi password
+-----
 
-### 🌟 Komponen:
+## 3️⃣ **Proses Tambah Data (Create)**
 
-* Nama
-* Email
-* Password
-* Konfirmasi Password
-* Tombol Registrasi
+Menambahkan inventaris produk baru ke toko.
 
-### AppBar:
+### **a. Form Tambah Produk**
 
-```dart
-title: const Text("Registrasi Defit")
-```
+User menekan tombol **(+)** di halaman utama. Form terbuka dalam keadaan kosong (Mode Tambah). User mengisi Kode, Nama, dan Harga Produk.
 
----
+### **b. Data Berhasil Disimpan**
 
-## 📋 **3. List Produk — `produk_page.dart`**
+Data dikirim ke server via method `POST`. Jika sukses, user dikembalikan ke halaman list dan data baru langsung tampil.
 
-### 🎯 Tujuan:
+-----
 
-Menampilkan daftar produk dalam bentuk card.
+## 4️⃣ **Proses Edit Data (Update)**
 
-### 🌟 Fitur:
+Memperbarui informasi produk yang salah atau berubah.
 
-* List produk statis
-* Drawer menu (Logout)
-* Tombol tambah (+) → menuju form tambah produk
-* Klik item → buka detail produk
+### **a. Membuka Form Edit (Pre-filled)**
 
-### AppBar:
+Dari halaman detail produk, user menekan tombol **EDIT**. Form terbuka dan kolom isian **terisi otomatis** dengan data produk yang dipilih (tidak perlu mengetik ulang dari awal).
 
-```dart
-title: const Text("List Produk Defit")
-```
+### **b. Melakukan Perubahan**
 
----
+User mengubah data yang diinginkan (Contoh: Mengubah Harga produk).
 
-## ➕ **4. Tambah / Edit Produk — `produk_form.dart`**
+### **c. Edit Berhasil**
 
-### 🎯 Tujuan:
+Aplikasi mengirim data perubahan ke server menggunakan method `PUT` dengan format JSON. Data di list diperbarui sesuai inputan terakhir.
 
-Halaman serbaguna untuk:
+-----
 
-✔ Tambah produk
-✔ Edit produk
+## 5️⃣ **Proses Hapus Data (Delete)**
 
-### 🌟 Mode Otomatis:
+Menghapus produk yang sudah tidak dijual.
 
-Jika `widget.produk != null` → mode edit.
-Jika null → mode tambah.
+### **a. Konfirmasi Penghapusan**
 
-### 🧾 Contoh penentuan mode:
+User menekan tombol **DELETE** di halaman detail. Muncul dialog konfirmasi *"Yakin ingin menghapus data ini?"* untuk mencegah ketidaksengajaan.
 
-```dart
-if (widget.produk != null) {
-  judul = "UBAH PRODUK Defit";
-} else {
-  judul = "TAMBAH PRODUK Defit";
-}
-```
+### **b. Hapus Berhasil**
 
-### Komponen:
+Jika user menekan "Ya", aplikasi mengirim request `DELETE` ke server. Produk dihapus dari database dan hilang dari tampilan list.
 
-* TextField Kode Produk
-* TextField Nama Produk
-* TextField Harga
-* Tombol Ubah / Simpan
+-----
 
----
+# 🛠️ **Konfigurasi Teknis**
 
-## 🔍 **5. Detail Produk — `produk_detail.dart`**
+Aplikasi ini dikonfigurasi untuk berjalan di jaringan lokal (LAN/WiFi).
 
-### 🎯 Tujuan:
+  * **API Base URL:** Diatur di `helpers/api_url.dart`.
+  * **Backend Server:** Dijalankan dengan perintah `php spark serve --host [IP_LAPTOP] --port 8080`.
+  * **Keamanan:** Menggunakan `Bearer Token` pada setiap request API (kecuali Login/Register).
 
-Menampilkan detail lengkap:
+-----
 
-* Kode Produk
-* Nama Produk
-* Harga Produk
-
-Termasuk tombol:
-
-* **Edit Produk** → membuka `produk_form.dart`
-* **Hapus Produk** → (siap dihubungkan API)
-
-### AppBar:
-
-```dart
-title: const Text("Detail Produk Defit")
-```
-
----
-
-# 🚀 **Cara Menjalankan Aplikasi**
-
-### 1. Install dependency:
+**© 2025 Defit Bagus Saputra**
 
 ```
-flutter pub get
-```
-
-### 2. Jalankan aplikasi:
-
-```
-flutter run
-```
-
-### 3. Halaman pertama yang tampil:
-
-👉 **Login Defit**
-
----
-
-# 📌 *Catatan Penting*
-
-* Data produk masih **statis**, belum terhubung API.
-* UI mengikuti modul pertemuan 10.
-* Action Bar sudah memakai nama panggilan **Defit** sesuai instruksi dosen.
-
----
