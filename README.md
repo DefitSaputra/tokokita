@@ -24,7 +24,6 @@
 | **Nama** | Defit Bagus Saputra |
 | **NIM** | H1D023036 |
 | **Kelas** | Pemrograman Mobile (Shift C/F) |
-| **Topik** | CRUD Full Stack (Create, Read, Update, Delete) |
 
 ---
 
@@ -237,13 +236,43 @@ onPressed: () {
 
 ---
 
-# 🛠️ **Struktur & Konfigurasi**
+## 6️⃣ **Struktur Folder Proyek**
 
-Aplikasi menggunakan arsitektur BLoC sederhana (Business Logic Component) untuk memisahkan UI dari proses API.
+Aplikasi TokoKita menggunakan arsitektur **BLoC (Business Logic Component)** untuk memisahkan logika bisnis dari UI layer.
 
-* **`lib/bloc`**: Menangani request ke API (Login, Registrasi, Produk).
-* **`lib/ui`**: Menangani tampilan (Page & Form).
-* **`lib/helpers`**: Menangani Shared Preference (Token) dan Exception.
+```
+tokokita/
+├── lib/
+│   ├── bloc/
+│   │   ├── login_bloc.dart
+│   │   ├── registrasi_bloc.dart
+│   │   └── produk_bloc.dart
+│   ├── ui/
+│   │   ├── pages/
+│   │   │   ├── login_page.dart
+│   │   │   ├── registrasi_page.dart
+│   │   │   └── produk_page.dart
+│   │   └── forms/
+│   │       └── produk_form.dart
+│   ├── helpers/
+│   │   ├── user_info.dart
+│   │   ├── api_helper.dart
+│   │   └── app_exception.dart
+│   ├── models/
+│   │   └── produk.dart
+│   └── main.dart
+├── pubspec.yaml
+└── README.md
+```
+
+### **Penjelasan Struktur:**
+
+- **`lib/bloc/`**: Menangani logika bisnis dan request ke REST API CodeIgniter 4
+- **`lib/ui/pages/`**: Halaman utama aplikasi (Login, Registrasi, List Produk)
+- **`lib/ui/forms/`**: Form tambah/edit data produk
+- **`lib/helpers/`**: Utility untuk SharedPreferences (Token), API calls, dan error handling
+- **`lib/models/`**: Model data (Produk, User, dll)
+
 
 ```plaintext
 Copyright © 2025 Defit Bagus Saputra
